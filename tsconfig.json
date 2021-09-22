@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "es5",                          
+      "module": "esnext",   
+      "strict": true,
+      "declaration": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "outDir": "dist/esm",
+      "downlevelIteration": true,
+      "typeRoots": [
+        "node_modules/@types"
+      ]
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
