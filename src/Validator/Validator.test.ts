@@ -1,4 +1,3 @@
-import { strVal } from "../types/types";
 import Validator from "./Validator";
 
 const easyVal = new Validator({mode: "easy"});

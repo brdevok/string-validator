@@ -2,18 +2,22 @@ import { strVal } from "../types/types"
 
 class Validator {
 
+    /** Current mode of the validator instance. */
     private mode:strVal.Mode;
 
+    /** RegExp collection to test strings. */
     private testRegExp:{[key: string]: RegExp} = {
         any: /^[\w\W]{0,}$/g,
     }
 
+    /** Initialize a new instance of the validator with the config options. */
     constructor(options:strVal.ConfigOptions) {
 
         this.mode = options.mode ? options.mode : "easy";
 
     }
 
+    /** Throw an error with a suitable message identified by a code ID, additional data can be provided. */
     private throwError(code:string, arg?:string):void {
 
         switch (code) {
@@ -29,6 +33,7 @@ class Validator {
 
     }
 
+    /** Test the validating string length. */
     private testLength(length:number, lengthOpts:strVal.LengthOptions):boolean {
 
         if ((lengthOpts.min && typeof lengthOpts.min !== "number") || (lengthOpts.max && typeof lengthOpts.max !== "number")) this.throwError("002");
@@ -47,6 +52,7 @@ class Validator {
 
     }
 
+    /** Test the validating string. */
     private testString(string:string, type:string):boolean|void {
 
         if (type in this.testRegExp) {
@@ -61,6 +67,7 @@ class Validator {
 
     }
 
+    /** Run a string validation in easy mode. */
     private _strEasyMode(string:string, lengthOpts?:strVal.LengthOptions, type?:strVal.ValTypes):boolean|void {
         
         if (lengthOpts) {
@@ -75,6 +82,7 @@ class Validator {
 
     }
 
+    /** Test a string, the validation result depends on the mode that the validator is currently running. */
     public str(string:string, lengthOpts?:strVal.LengthOptions, type?:strVal.ValTypes):boolean|void {
         
         if (typeof string !== "string") this.throwError("000", typeof string);
