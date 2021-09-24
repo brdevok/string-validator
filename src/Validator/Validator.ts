@@ -1,6 +1,10 @@
 import { strVal } from "../types/types";
 import failures from "./failures";
 
+/**
+ * Core validator class, contains all the testing methods for strings and numbers
+ * and must be initialized as an new instance.
+ */
 class Validator {
 
     /** Current mode of the validator instance. */
@@ -25,7 +29,12 @@ class Validator {
         float: (n:number) => n % 1 !== 0
     };
 
-    /** Initialize a new instance of the validator with the config options. */
+    /**
+     * Create a new instance of the validator class, a set of settings can be passed as an object
+     * argument to define the mode and other general options.
+     * By default the validator runs in "easy" mode that only return booleans as a validation result,
+     * the "rich" mode returns an object with additional data of the validation process.
+     */
     constructor(options:strVal.ConfigOptions) {
         
         if (options.mode && (options.mode !== "easy" && options.mode !== "rich")) this.throwError("300", options.mode);
@@ -34,7 +43,12 @@ class Validator {
 
     }
 
-    /** Throw an error with a suitable message identified by a code ID, additional data can be provided. */
+    /**
+     * Throw an error if something in the validation process does not meet the requirements to work
+     * properly.
+     * The error displayed depends on the error code passed ass an argument, in addition, some extra
+     * argument can be passed to display dynamic error messages.
+     */
     private throwError(code:string, arg?:string):void {
 
         switch (code) {
@@ -60,7 +74,11 @@ class Validator {
 
     }
 
-    /** Test the validating string length. */
+    /** 
+     * Run a string length test, this function is called when the length range options are passed to the
+     * main validator function and return a boolean if mode is equal to "easy" or an object with the
+     * test results data if it's on "rich".
+     */
     private testLength(length:number, lengthOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
 
         if (("min" in lengthOpts && typeof lengthOpts.min !== "number") || ("max" in lengthOpts && typeof lengthOpts.max !== "number")) this.throwError("002");
@@ -99,7 +117,11 @@ class Validator {
 
     }
 
-    /** Test the value of the number with min and max limits if their are specified. */
+    /** 
+     * Run a number range test, this function is called when the range options are passed to the
+     * main validator function and return a boolean if mode is equal to "easy" or an object with the
+     * test results data if it's on "rich".
+     */
     private testRange(number:number, rangeOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
 
         if (("min" in rangeOpts && typeof rangeOpts.min !== "number") || ("max" in rangeOpts && typeof rangeOpts.max !== "number")) this.throwError("003");
@@ -137,7 +159,11 @@ class Validator {
 
     }
 
-    /** Test the validating string. */
+    /**
+     * Test a string against a regular expression defined by the test type argument.
+     * If the validator is running on "easy" mode, this will return a single boolean,
+     * a rich object with the results data will be returned instead if mode is "rich".
+     */
     private testString(string:string, type:string):boolean|strVal.ValRichResults|void {
         
         let test:boolean;
@@ -174,7 +200,12 @@ class Validator {
 
     }
 
-    /** Test the number type */
+    /**
+     * Test a number with some math expressions to define the current number type if test type has
+     * been passed to the core validator function.
+     * If the validator is running on "easy" mode, this will return a single boolean,
+     * a rich object with the results data will be returned instead if mode is "rich".
+     */
     private testNumber(number:number, type:string):boolean|strVal.ValRichResults|void {
 
         let test:boolean;
@@ -209,7 +240,17 @@ class Validator {
 
     }
 
-    /** Test a string, the validation result depends on the mode that the validator is currently running. */
+    /** 
+     * Run a string test to define if the passed string match the specified requeriments
+     * of length and validation type.
+     * When "easy" mode is enabled, this function will return always a boolean, *true* for
+     * success *false* for failure, if "rich" mode is active, then the result will be a
+     * rich object that displays all the validation results data, you can manage wich data
+     * to display inside the object with the constructor settings.
+     * 
+     * If no requeriments are passed, then this function will always return *true* on
+     * "easy" mode or *{ result: true }* on "rich" mode.
+     */
     public str(string:string, lengthOpts?:strVal.RangeOptions|null, type?:strVal.StrValTypes):boolean|strVal.StrValRichResults|void {
         
         if (typeof string !== "string") this.throwError("000", typeof string);
@@ -270,7 +311,17 @@ class Validator {
 
     }
 
-    /** Test a number, the validation result depends on the mode that the validator is currently running. */
+    /** 
+     * Run a number test to define if the passed number match the specified requeriments
+     * of range and validation type.
+     * When "easy" mode is enabled, this function will return always a boolean, *true* for
+     * success *false* for failure, if "rich" mode is active, then the result will be a
+     * rich object that displays all the validation results data, you can manage wich data
+     * to display inside the object with the constructor settings.
+     * 
+     * If no requeriments are passed, then this function will always return *true* on
+     * "easy" mode or *{ result: true }* on "rich" mode.
+     */
     public num(number:number, rangeOpts?:strVal.RangeOptions|null, type?:strVal.NumValTypes):boolean|strVal.NumValRichResults|void {
 
         if (typeof number !== "number") this.throwError("001", typeof number);
