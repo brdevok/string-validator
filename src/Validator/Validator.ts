@@ -35,11 +35,38 @@ class Validator {
      * By default the validator runs in "easy" mode that only return booleans as a validation result,
      * the "rich" mode returns an object with additional data of the validation process.
      */
-    constructor(options:strVal.ConfigOptions) {
+    constructor(options?:strVal.ConfigOptions) {
         
-        if (options.mode && (options.mode !== "easy" && options.mode !== "rich")) this.throwError("300", options.mode);
+        if (options && options.mode && (options.mode !== "easy" && options.mode !== "rich")) this.throwError("300", options.mode);
 
-        this.mode = options.mode ? options.mode : "easy";
+        this.mode = (options && options.mode) ? options.mode : "easy";
+
+    }
+
+    /**
+     * Add a new test type for strings, you can make use of the added tests
+     * with the main validator string function passing the defined key name as a test type argument.
+     */
+    public addStrTest(key:string, regexp:RegExp|string):void {
+
+        if (typeof key !== "string") this.throwError("005");
+        if (!/^[a-zA-Z]+[a-zA-Z0-9\-_]+$/m.test(key)) this.throwError("203");
+        if (!(regexp instanceof RegExp) && typeof regexp !== "string") this.throwError("004");
+
+        let newRegExp:RegExp;
+
+        try { 
+
+            newRegExp = new RegExp(regexp, "m"); 
+
+        } catch(e) { 
+
+            newRegExp = this.testRegExp.any;
+            this.throwError("200"); 
+
+        }
+
+        this.testRegExp = {...this.testRegExp, [key]: newRegExp};
 
     }
 
@@ -58,13 +85,17 @@ class Validator {
             case "001": throw new Error(`Expected a number datatype to validate, instead received: '${arg}'`);
             case "002": throw new Error("Unexpected datatype on length options, expected all values to be a number.");
             case "003": throw new Error("Unexpected datatype on range options, expected all values to be a number.");
+            case "004": throw new Error("Wrong regular expression value on argument, expected a valid string/RegExp pattern.");
+            case "005": throw new Error("Wrong key value on argument, expected a valid object-key string.");
             // Range errors
             case "100": throw new Error("Wrong length options configuration, 'min' value must be minor than or equal to 'max' value.");
             case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
             case "102": throw new Error("Wrong length options configuration, 'min' and 'max' must be positive integers.");
             // Test types errors
+            case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
             case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
             case "202": throw new Error(`Test type '${arg}' is not a valid number test key.`);
+            case "203": throw new Error(`Test type key argument is not a valid object-key string.`);
             // Settings errors
             case "300": throw new Error(`Wrong instance, '${arg}' is not a valid mode.`);
 
@@ -378,7 +409,6 @@ class Validator {
             return results;
 
         }
-
 
     }
 
