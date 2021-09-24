@@ -17,7 +17,13 @@ class Validator {
         mix: /^[a-zA-Z0-9 ,.\-()+]{0,}$/m,
         float: /^[0-9]+\.[0-9]+$/m,
         password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m
-    }
+    };
+
+    /** Collection of methods to validate different number types */
+    private numberTests:strVal.NumTestTypes = {
+        int: (n:number) => n % 1 === 0,
+        float: (n:number) => n % 1 !== 0
+    };
 
     /** Initialize a new instance of the validator with the config options. */
     constructor(options:strVal.ConfigOptions) {
@@ -43,7 +49,8 @@ class Validator {
             case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
             case "102": throw new Error("Wrong length options configuration, 'min' and 'max' must be positive integers.");
             // Test types errors
-            case "201": throw new Error(`Test type '${arg}' is not a valid key.`);
+            case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
+            case "202": throw new Error(`Test type '${arg}' is not a valid number test key.`);
             // Settings errors
             case "300": throw new Error(`Wrong instance, '${arg}' is not a valid mode.`);
 
@@ -54,19 +61,19 @@ class Validator {
     }
 
     /** Test the validating string length. */
-    private testLength(length:number, lengthOpts:strVal.RangeOptions):boolean|strVal.LengthValRichResults {
+    private testLength(length:number, lengthOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
 
-        if ((lengthOpts.min && typeof lengthOpts.min !== "number") || (lengthOpts.max && typeof lengthOpts.max !== "number")) this.throwError("002");
-        if ((lengthOpts.min && lengthOpts.max) && lengthOpts.min > lengthOpts.max) this.throwError("100");
-        if ((lengthOpts.min && lengthOpts.min < 0) || (lengthOpts.max && lengthOpts.max < 0)) this.throwError("102");
+        if (("min" in lengthOpts && typeof lengthOpts.min !== "number") || ("max" in lengthOpts && typeof lengthOpts.max !== "number")) this.throwError("002");
+        if (("min" in lengthOpts && "max" in lengthOpts) && (lengthOpts.min as number) > (lengthOpts.max as number)) this.throwError("100");
+        if (("min" in lengthOpts && lengthOpts.min as number < 0) || ("max" in lengthOpts && lengthOpts.max as number < 0)) this.throwError("102");
 
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
 
-            if (lengthOpts.min && length < lengthOpts.min) return false;
-            if (lengthOpts.max && length > lengthOpts.max) return false;
+            if ("min" in lengthOpts && length < (lengthOpts.min as number)) return false;
+            if ("max" in lengthOpts && length > (lengthOpts.max as number)) return false;
 
             return true;
 
@@ -75,44 +82,63 @@ class Validator {
          */
         } else {
 
-            if (lengthOpts.min && length < lengthOpts.min) return {
+            if ("min" in lengthOpts && length < (lengthOpts.min as number)) return {
                 result: false,
                 failure: "MINLENGTH",
                 description: failures["MINLENGTH"]
-            } as strVal.LengthValRichResults
-            if (lengthOpts.max && length > lengthOpts.max) return {
+            }
+            if ("max" in lengthOpts && length > (lengthOpts.max as number)) return {
                 result: false,
                 failure: "MAXLENGTH",
                 description: failures["MAXLENGTH"]
-            } as strVal.LengthValRichResults
+            }
 
-            return { result: true } as strVal.LengthValRichResults;
+            return { result: true };
 
         }
 
     }
 
     /** Test the value of the number with min and max limits if their are specified. */
-    private testRange(number:number, rangeOpts:strVal.RangeOptions):boolean|strVal.RangeValRichResults {
+    private testRange(number:number, rangeOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
 
-        if ((rangeOpts.min && typeof rangeOpts.min !== "number") || (rangeOpts.max && typeof rangeOpts.max !== "number")) this.throwError("003");
-        if ((rangeOpts.min && rangeOpts.max) && rangeOpts.min > rangeOpts.max) this.throwError("101");
+        if (("min" in rangeOpts && typeof rangeOpts.min !== "number") || ("max" in rangeOpts && typeof rangeOpts.max !== "number")) this.throwError("003");
+        if (("min" in rangeOpts && "max" in rangeOpts) && (rangeOpts.min as number) > (rangeOpts.max as number)) this.throwError("101");
     
+        /**
+         * CHECK RANGE IN EASY MODE
+         */
         if (this.mode === "easy") {
 
-            if (rangeOpts.min && number < rangeOpts.min) return false;
-            if (rangeOpts.max && number > rangeOpts.max) return false;
+            if ("min" in rangeOpts && number < (rangeOpts.min as number)) return false;
+            if ("max" in rangeOpts && number > (rangeOpts.max as number)) return false;
 
             return true;
 
-        }
+        /**
+         * CHECK RANGE IN RICH MODE
+         */
+        } else {
 
-        return false; // debug
+            if ("min" in rangeOpts && number < (rangeOpts.min as number)) return {
+                result: false,
+                failure: "MINRANGE",
+                description: failures["MINRANGE"]
+            }
+            if ("max" in rangeOpts && number > (rangeOpts.max as number)) return {
+                result: false,
+                failure: "MAXRANGE",
+                description: failures["MAXRANGE"]
+            }
+
+            return { result: true };
+
+        }
 
     }
 
     /** Test the validating string. */
-    private testString(string:string, type:string):boolean|strVal.StringValRichResults|void {
+    private testString(string:string, type:string):boolean|strVal.ValRichResults|void {
         
         let test:boolean;
 
@@ -138,9 +164,9 @@ class Validator {
                 result: false,
                 failure: "NOSTRMATCH",
                 description: failures["NOSTRMATCH"]
-            } as strVal.StringValRichResults;
+            } as strVal.ValRichResults;
 
-            return { result: true } as strVal.StringValRichResults;
+            return { result: true } as strVal.ValRichResults;
 
         }
 
@@ -149,14 +175,35 @@ class Validator {
     }
 
     /** Test the number type */
-    private testNumber(number:number, type:string):boolean|strVal.NumValRichResults|void {
+    private testNumber(number:number, type:string):boolean|strVal.ValRichResults|void {
 
-        switch(type) {
+        let test:boolean;
 
-            case "int": return number % 1 === 0;
-            case "float": return number % 1 !== 0;
+        if (type in this.numberTests) test = this.numberTests[type](number);
+        else {
+            test = false;
+            this.throwError("202", type);
+        }
 
-            default: this.throwError("201", type);
+        /**
+         * TEST NUMBER IN EASY MODE
+         */
+        if (this.mode === "easy") {
+
+            return test;
+        
+        /**
+         * TEST NUMBER IN RICH MODE
+         */
+        } else {
+
+            if (!test) return {
+                result: false,
+                failure: "NONUMMATCH",
+                description: failures["NONUMMATCH"]
+            } as strVal.ValRichResults;
+
+            return { result: true } as strVal.ValRichResults;
 
         }
 
@@ -176,7 +223,7 @@ class Validator {
 
             // Check length of the string
             if (lengthOpts) {
-                if (!this.testLength(string.length, lengthOpts)) return false;
+                if (!this.testLength(string.length, lengthOpts) as boolean) return false;
             }
 
             // Test string
@@ -200,18 +247,18 @@ class Validator {
                 length: string.length
             } as strVal.StrValRichResults;
 
-            if (type) results = {...results, test: type};
             if (lengthOpts) results = {...results, testLength: lengthOpts};
+            if (type) results = {...results, test: type};
 
             // Check length of the string
             if (lengthOpts) {
-                results = {...results, ...this.testLength(string.length, lengthOpts) as strVal.LengthValRichResults};
+                results = {...results, ...this.testLength(string.length, lengthOpts) as strVal.ValRichResults};
                 if (!results.result) return results;
             }
 
             // Test string
             if (type) {
-                results = {...results, ...this.testString(string, type) as strVal.StringValRichResults};
+                results = {...results, ...this.testString(string, type) as strVal.ValRichResults};
                 return results;
             }
 
@@ -227,6 +274,59 @@ class Validator {
     public num(number:number, rangeOpts?:strVal.RangeOptions|null, type?:strVal.NumValTypes):boolean|strVal.NumValRichResults|void {
 
         if (typeof number !== "number") this.throwError("001", typeof number);
+        
+        /**
+         * --------------
+         * EASY MODE TEST
+         * --------------
+         */
+        if (this.mode === "easy") {
+
+            // Check if number is inside specified range
+            if (rangeOpts) {
+                if (!this.testRange(number, rangeOpts) as boolean) return false;
+            }
+
+            // Test number type
+            if (type) {
+                return this.testNumber(number, type) as boolean;
+            }
+
+            // Default return
+            return true;
+
+        /**
+         * --------------
+         * RICH MODE TEST
+         * --------------
+         */
+        } else {
+
+            // Default results values in rich mode
+            let results = {
+                number: number
+            } as strVal.NumValRichResults;
+
+            if (rangeOpts) results = {...results, testRange: rangeOpts};
+            if (type) results = {...results, test: type};
+
+            // Check if number is inside specified range
+            if (rangeOpts) {
+                results = {...results, ...this.testRange(number, rangeOpts) as strVal.ValRichResults};
+                if (!results.result) return results;
+            }
+
+            // Test number type
+            if (type) {
+                results = {...results, ...this.testNumber(number, type) as strVal.ValRichResults};
+                return results;
+            }
+
+            // Default return
+            results = {...results, result: true};
+            return results;
+
+        }
 
 
     }

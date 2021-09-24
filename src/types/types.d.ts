@@ -18,6 +18,11 @@ export namespace strVal {
         float: RegExp
         password: RegExp
     }
+    interface NumTestTypes {
+        [key: string]: (n:number) => boolean
+        int: (n:number) => boolean
+        float: (n:number) => boolean
+    }
 
     type StrValTypes = "any"|"abc"|"text"|"num"|"field"|"email"|"mix"|"float"|"password"
     type NumValTypes = "int"|"float"
@@ -38,30 +43,18 @@ export namespace strVal {
         failure?: string
         description?: string
     }
-
-    interface StringValRichResults extends ValRichResults {
+    
+    interface StrValRichResults extends ValRichResults {
         string: string
-    }
-
-    interface NumberValRishResults extends ValRichResults {
-        number: number
-    }
-
-    interface LengthValRichResults extends ValRichResults {
+        test?: string
         length: number
         testLength?: RangeOptions
     }
 
-    interface RangeValRichResults extends ValRichResults {
+    interface NumValRichResults extends ValRichResults {
+        number: number
+        test?: string
         testRange?: RangeOptions
-    }
-    
-    interface StrValRichResults extends StringValRichResults, LengthValRichResults {
-        test?: string
-    }
-
-    interface NumValRichResults extends NumberValRishResults, RangeValRichResults {
-        test?: string
     }
 
 }
