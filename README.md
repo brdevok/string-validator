@@ -9,9 +9,8 @@ This little library written in Typescript was made to serve as a faster and reli
  * [Properly explanation of use](#properly-explanation-of-use)
     * [Validation methods](#validation-methods)
     * [Test strings](#test-strings)
-    * [Test string length](#test-length)
     * [Test numbers](#test-numbers)
-    * [Test number range](#test-range)
+    * [Test limits](#test-limits)
     * [Results](#results)
  * [Settings](#settings)
     * [Modes](#modes)
@@ -67,7 +66,7 @@ The arguments logic follow this simple pattern for both methods: `function(subje
  * `limits` are the delimeter ranges that a `string` length or `number` value must have to return a success result.
  * `test` it the test type that the `subject` will face to return a success result.
 
-#### `str()`:
+#### `str(subject, limits, test)`:
 
 Argument | Data-type | Values
 --------- | --------- | -------
@@ -75,7 +74,7 @@ Argument | Data-type | Values
 `limits` | `object\|null` | `{min?: number, max?: number}` Example: `{min: 0, max:100}`
 `test` | `string\|undefined` | `"any"\|"abc"\|"text"\|"num"\|"field"\|"email"\|"mix"\|"float"\|"password"`
 
-#### `num()`:
+#### `num(subject, limits, test)`:
 
 Argument | Data-type | Values
 --------- | --------- | -------
@@ -97,7 +96,7 @@ Key | RegExp | Description
 `"email"` | `/^[^@]+@[a-zA-Z0-9\-]+(\.[a-zA-Z]+){1,3}$/m` | Validates an email-like string
 `"mix"` | `/^[a-zA-Z0-9 ,.\-()+]{0,}$/m` | Allow the use of letters and numbers and some special characters, can be used for addresses.
 `"float"` | `/^[0-9]+\.[0-9]+$/m` | Checks if the string is in a float-like format
-`"password"` | :eyes: | Checks if a string contains at least 1 minuscule, 1 minuscule, 1 number and 1 special character
+`"password"` | :eyes: | Checks if a string contains at least 1 minuscule, 1 capital letter, 1 number and 1 special character
 
 By default, no match test is ran if you don't specify one.
 
@@ -112,7 +111,6 @@ console.log(good) // true
 console.log(bad)  // false
 ```
 
-Examples:
 ```javascript
 // "rich" mode ON
 
@@ -134,6 +132,85 @@ console.log(bad) /* {
     description: "String doesn't match with the specified test type."
 } */
 ```
+
+### Test numbers
+
+The validator comes with some testing for numbers to, this is experimental and there's not much to show, but there we go.
+
+You can test if a number is an int or a float with the `"int"` and `"float"` test types, see below:
+
+```javascript
+// "easy" mode ON
+
+const isInteger = validate.num(10, null, "int");
+const isFloat = validate.num(1.50, null, "float");
+
+console.log(isInteger) // true
+console.log(isFloat)   // true
+```
+
+### Test limits
+
+You can check if a string length is between a set of limits that can define yourself in the `limits` argument object.
+
+By default, there's no predefined limits, if you pass `null` o leave the argument empty, no length test will run.
+
+Examples on easy mode:
+
+ * Checks if a string is at least 20 characters long.
+```javascript
+validate.str("some string with more than twenty chars", { min: 20 }, "field") // true
+```
+ * Checks if a string length is less than 10 characters long.
+```javascript
+validate.str("some string with more than ten chars", { max: 10 }, "field") // false
+```
+ * Checks if a string length is between 1 and 1000.
+```javascript
+validate.str("this string fits correctly", { min: 1 max: 1000 }, "field") // true
+```
+ * Checks if a string length is exactly 4 characters.
+```javascript
+validate.str("four", { min: 4 max: 4 }, "field") // true
+```
+
+**Note**: Testing strings, `min` will always be 0 and cannot be less than that.
+
+This works same with numbers, the diference here is that you can play with negative values.
+```javascript
+validate.num(20, { min: 0 max: 100 }, "field") // true
+validate.num(-5, { min: -100 max: 100 }, "field") // true
+validate.num(1, { max: 0.99 }, "field") // false
+```
+
+### Results
+
+When testing strings or numbers on `"easy"` mode, the results can be only one of two values: `true` or `false`. But on `"rich"` mode, validations throws an object with a set of data that can help you to understand what fails if it does, or have a bit more info in the bag.
+
+The contained data of the object is described in the table below:
+
+Key | Value | Success | Failure | Description
+--- | ----- | ------- | ------- | -----------
+`result`| `boolean` | :heavy_check_mark: | :heavy_check_mark: | Final result of the validation
+`failure`| `string` | :x: | :heavy_check_mark: | Failure code
+`description` | `string` | :x: | :heavy_check_mark: | Failure description
+`subject` | `string\|number` | :heavy_check_mark: | :heavy_check_mark: | Tested subject
+`test` | `string` | :heavy_check_mark: | :heavy_check_mark: | Test type used (only if defined)
+`length` | `number` | :heavy_check_mark: | :heavy_check_mark: | Length of the subject (if defined and if it's a string)
+`limits` | `object` | :heavy_check_mark: | :heavy_check_mark: | Limits tested (if defined)
+
+When a test returns failure, the `failure` and `description` can help you to understand where was the problem with the subject, the possible failure codes and descriptions are below:
+
+Failure | Description
+------- | -----------
+`"MINLENGTH"` | `"String length doesn't fill the minimum required value."`
+`"MAXLENGTH"` | `"String length is over the maximum specified value."`
+`"NOSTRMATCH"` | `"String doesn't match with the specified test type."`
+`"MINRANGE"` | `"Number value is less than the minumum required value."`
+`"MAXRANGE"` | `"Number value is greater than the maximum specified value."`
+`"NONUMMATCH"` | `"Number type doesn't match with the specified test type."`
+
+
 
 ## Settings
 
@@ -227,6 +304,8 @@ const validate = new Validator({
     }
 })
 ```
+
+Data that can be hidden:
 
 Key | Value | Default | Description
 --- | ----- | ------- | -----------
