@@ -52,7 +52,7 @@ By default the validator has three properties that can be managed in `settings` 
 
 Argument | Data-type | Value
 -------- | --------- | -----
-`mode` | `string` | `"easy"|"rich"`
+`mode` | `string` | `"easy"\|"rich"`
 `lang` | `string` | `"en"|"es"|"br"|"fr"|"de"`
 `results` | `object` | Example: `{string: false, length: false}`
 
