@@ -10,11 +10,12 @@
       "outDir": "dist/esm",
       "downlevelIteration": true,
       "typeRoots": [
+        "src/types",
         "node_modules/@types"
       ]
     },
     "include": [
-        "src"
+        "src", "src/types",   
     ],
     "exclude": [
         "node_modules",

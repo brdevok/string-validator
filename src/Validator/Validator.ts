@@ -7,6 +7,7 @@ import failures from "./failures";
  */
 class Validator {
 
+    /** Language setting for RegExp tests */
     private lang:strVal.Lang = "en";
 
     /** Current mode of the validator instance. */
