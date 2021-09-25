@@ -53,7 +53,7 @@ By default the validator has three properties that can be managed in `settings` 
 Argument | Data-type | Value
 -------- | --------- | -----
 `mode` | `string` | `"easy"\|"rich"`
-`lang` | `string` | `"en"|"es"|"br"|"fr"|"de"`
+`lang` | `string` | `"en"\|"es"\|"br"\|"fr"\|"de"`
 `results` | `object` | Example: `{string: false, length: false}`
 
 #### Modes
@@ -104,16 +104,16 @@ The arguments logic follow this simple pattern for both methods: `function(subje
 Argument | Data-type | Values
 --------- | --------- | -------
 `subject` | `string` | Example: `"Lorem ipsum"`
-`limits` | `object|null` | `{min?: number, max?: number}` Example: `{min: 0, max:100}`
-`test` | `string|undefined` | `"any"|"abc"|"text"|"num"|"field"|"email"|"mix"|"float"|"password"`
+`limits` | `object\|null` | `{min?: number, max?: number}` Example: `{min: 0, max:100}`
+`test` | `string\|undefined` | `"any"\|"abc"\|"text"\|"num"\|"field"\|"email"\|"mix"\|"float"\|"password"`
 
 #### `num()`:
 
 Argument | Data-type | Values
 --------- | --------- | -------
 `subject` | `number` | Example: `123`
-`limits` | `object|null` | `{min?: number, max?: number}` Example: `{min: -100, max:100}`
-`test` | `string|undefined` | `"int"|"float"`
+`limits` | `object\|null` | `{min?: number, max?: number}` Example: `{min: -100, max:100}`
+`test` | `string\|undefined` | `"int"\|"float"`
 
 
 
