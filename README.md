@@ -4,6 +4,8 @@ This little library written in Typescript was made to serve as a faster and reli
 
 ## Index
 
+[Installation]##Installation
+
 ## Installation
 
 Run the command `npm i --save-dev @brdev/string-validator` to include the library directly into your proyect.
