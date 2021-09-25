@@ -4,7 +4,7 @@ This little library written in Typescript was made to serve as a faster and reli
 
 ## Index
 
- * [Installation](##installation)
+ * [Installation](#installation)
 
 ## Installation
 
