@@ -1,4 +1,4 @@
-# String Validator Library
+# String Validator Library :heavy_check_mark:
 
 This little library written in Typescript was made to serve as a faster and reliable easy-to-use tool for strings validations that come **specially** from UI forms, but can be used to test any string type no matter the source.
 
@@ -178,9 +178,9 @@ validate.str("four", { min: 4 max: 4 }, "field") // true
 
 This works same with numbers, the diference here is that you can play with negative values.
 ```javascript
-validate.num(20, { min: 0 max: 100 }, "field") // true
-validate.num(-5, { min: -100 max: 100 }, "field") // true
-validate.num(1, { max: 0.99 }, "field") // false
+validate.num(20, { min: 0 max: 100 })    // true
+validate.num(-5, { min: -100 max: 100 }) // true
+validate.num(1, { max: 0.99 })           // false
 ```
 
 ### Results
