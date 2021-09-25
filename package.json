@@ -13,7 +13,11 @@
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "build": "npm run build:esm && npm run build:cjs"
   },
-  "keywords": [],
+  "keywords": [
+    "string", "numbers", "validation", "form", "field", "password", "email", 
+    "name", "regular expression", "regexp", "alphabet", "string-validator", 
+    "number-validator", "validator", "test", "match", "text" 
+  ],
   "author": "Braian Rosas",
   "license": "MIT",
   "files": [
