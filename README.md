@@ -96,7 +96,13 @@ Key | RegExp | Description
 `"email"` | `/^[^@]+@[a-zA-Z0-9\-]+(\.[a-zA-Z]+){1,3}$/m` | Validates an email-like string
 `"mix"` | `/^[a-zA-Z0-9 ,.\-()+]{0,}$/m` | Allow the use of letters and numbers and some special characters, can be used for addresses.
 `"float"` | `/^[0-9]+\.[0-9]+$/m` | Checks if the string is in a float-like format
-`"password"` | :eyes: | Checks if a string contains at least 1 minuscule, 1 capital letter, 1 number and 1 special character
+`"password"` | :eyes: | Checks if a string contains at least 1 lowercase letter, 1 uppercase letter, 1 number and 1 special character
+`"lowpassword"` | `/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-z]).*$/m` | Same as `"password"` but special characters are not strict required
+`"url"` | `/^(http(s)?):\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/m` | Detects if string has URL format
+`"http"` | `^(http):\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/m` | Same as `"url"` but only accept HTTP URLs
+`"https"` | `^(https):\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/m` | Same as `"url"` but only accept HTTPS URLs
+`"base64"` | `/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/m` | Checks if string has base 64 format
+`"binary"` | `/^[01]+$/m` | Check if string is numeric binary format, i.e: `"0100101"`
 
 By default, no match test is ran if you don't specify one.
 
@@ -316,7 +322,22 @@ Key | Value | Default | Description
 `length` | `boolean` | `true` | Return the length of a string subject, i.e: `20`
 `limits` | `boolean` | `true` | Return the limits if setted, i.e: `{min: 0, max: 100}`
 
+## Add custom tests
 
+Validator has a lot of [pre-built tests](#test-strings), but you can add (overwrite) your owns if you want something more specific with the `addStrTest` method.
 
+#### `addStrTest(key, regexp)`
 
+To add a new test you must pass two arguments, the `key` and the `regexp`.
 
+ * `key` is a string with the name of your test and must follow the object keys naming conventions to be valid (be careful with overwrite the existing ones).
+ * `regexp` is a regular expression that will be used to accomplish the test, it can be a `RegExp` or a valid RegExp `string`.
+
+If the added test is correct, you can make use of it just calling the validation methods with your custom test type:
+
+```javascript
+validate.addStrTest("apple", /^apple$/m);
+
+validate.str("apple", null, "apple"); // true
+validate.str("banana", null, "apple"); // false
+```

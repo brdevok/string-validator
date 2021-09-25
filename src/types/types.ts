@@ -47,6 +47,12 @@ export declare namespace strVal {
         mix: RegExp
         float: RegExp
         password: RegExp
+        lowpassword: RegExp
+        url: RegExp
+        http: RegExp
+        https: RegExp
+        base64: RegExp
+        binary: RegExp
     }
 
     /** Number tests property of Validator class. */
