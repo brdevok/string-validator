@@ -26,28 +26,26 @@ class Validator {
     private richResults:strVal.RichResults = {
         failure: true,
         description: true,
-        string: true,
+        subject: true,
         test: true,
         length: true,
-        testLength: true,
-        number: true,
-        testRange: true,
+        limits: true,
     }
 
     /**
      * Create a new instance of the validator class, a set of settings can be passed as an object
-     * argument to define the mode and other general options.
+     * argument to define the mode and other general settings.
      * By default the validator runs in "easy" mode that only return booleans as a validation result,
      * the "rich" mode returns an object with additional data of the validation process.
      */
-    constructor(options?:strVal.ConfigOptions) {
+    constructor(settings?:strVal.ConfigSettings) {
         
-        if (options && options.mode && (options.mode !== "easy" && options.mode !== "rich")) this.throwError("300", options.mode);
+        if (settings && settings.mode && (settings.mode !== "easy" && settings.mode !== "rich")) this.throwError("300", settings.mode);
 
         // Set props
-        if (options && options.mode) this.mode = options.mode;
-        if (options && options.results) this.richResults = {...this.richResults, ...options.results};
-        if (options && options.lang) this.lang = options.lang;
+        if (settings && settings.mode) this.mode = settings.mode;
+        if (settings && settings.results) this.richResults = {...this.richResults, ...settings.results};
+        if (settings && settings.lang) this.lang = settings.lang;
 
         // Set string regex tests values
         this.testRegExp = require("./testRegExp")[this.lang]
@@ -133,19 +131,19 @@ class Validator {
      * main validator function and return a boolean if mode is equal to "easy" or an object with the
      * test results data if it's on "rich".
      */
-    private testLength(length:number, lengthOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
+    private testLength(length:number, limits:strVal.LimitsOptions):boolean|strVal.ValRichResults {
 
-        if (("min" in lengthOpts && typeof lengthOpts.min !== "number") || ("max" in lengthOpts && typeof lengthOpts.max !== "number")) this.throwError("002");
-        if (("min" in lengthOpts && "max" in lengthOpts) && (lengthOpts.min as number) > (lengthOpts.max as number)) this.throwError("100");
-        if (("min" in lengthOpts && lengthOpts.min as number < 0) || ("max" in lengthOpts && lengthOpts.max as number < 0)) this.throwError("102");
+        if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("002");
+        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("100");
+        if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) this.throwError("102");
 
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
 
-            if ("min" in lengthOpts && length < (lengthOpts.min as number)) return false;
-            if ("max" in lengthOpts && length > (lengthOpts.max as number)) return false;
+            if ("min" in limits && length < (limits.min as number)) return false;
+            if ("max" in limits && length > (limits.max as number)) return false;
 
             return true;
 
@@ -154,12 +152,12 @@ class Validator {
          */
         } else {
 
-            if ("min" in lengthOpts && length < (lengthOpts.min as number)) return {
+            if ("min" in limits && length < (limits.min as number)) return {
                 result: false,
                 failure: "MINLENGTH",
                 description: failures["MINLENGTH"]
             }
-            if ("max" in lengthOpts && length > (lengthOpts.max as number)) return {
+            if ("max" in limits && length > (limits.max as number)) return {
                 result: false,
                 failure: "MAXLENGTH",
                 description: failures["MAXLENGTH"]
@@ -176,18 +174,18 @@ class Validator {
      * main validator function and return a boolean if mode is equal to "easy" or an object with the
      * test results data if it's on "rich".
      */
-    private testRange(number:number, rangeOpts:strVal.RangeOptions):boolean|strVal.ValRichResults {
+    private testRange(number:number, limits:strVal.LimitsOptions):boolean|strVal.ValRichResults {
 
-        if (("min" in rangeOpts && typeof rangeOpts.min !== "number") || ("max" in rangeOpts && typeof rangeOpts.max !== "number")) this.throwError("003");
-        if (("min" in rangeOpts && "max" in rangeOpts) && (rangeOpts.min as number) > (rangeOpts.max as number)) this.throwError("101");
+        if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("003");
+        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("101");
     
         /**
          * CHECK RANGE IN EASY MODE
          */
         if (this.mode === "easy") {
 
-            if ("min" in rangeOpts && number < (rangeOpts.min as number)) return false;
-            if ("max" in rangeOpts && number > (rangeOpts.max as number)) return false;
+            if ("min" in limits && number < (limits.min as number)) return false;
+            if ("max" in limits && number > (limits.max as number)) return false;
 
             return true;
 
@@ -196,12 +194,12 @@ class Validator {
          */
         } else {
 
-            if ("min" in rangeOpts && number < (rangeOpts.min as number)) return {
+            if ("min" in limits && number < (limits.min as number)) return {
                 result: false,
                 failure: "MINRANGE",
                 description: failures["MINRANGE"]
             }
-            if ("max" in rangeOpts && number > (rangeOpts.max as number)) return {
+            if ("max" in limits && number > (limits.max as number)) return {
                 result: false,
                 failure: "MAXRANGE",
                 description: failures["MAXRANGE"]
@@ -303,9 +301,9 @@ class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    public str(string:string, lengthOpts?:strVal.RangeOptions|null, type?:strVal.StrValTypes):boolean|strVal.StrValRichResults|void {
+    public str(subject:string, limits?:strVal.LimitsOptions|null, test?:strVal.StrValTypes):boolean|strVal.StrValRichResults|void {
 
-        if (typeof string !== "string") this.throwError("000", typeof string);
+        if (typeof subject !== "string") this.throwError("000", typeof subject);
 
         /**
          * --------------
@@ -315,13 +313,13 @@ class Validator {
         if (this.mode === "easy") {
 
             // Check length of the string
-            if (lengthOpts) {
-                if (!this.testLength(string.length, lengthOpts) as boolean) return false;
+            if (limits) {
+                if (!this.testLength(subject.length, limits) as boolean) return false;
             }
 
             // Test string
-            if (type) {
-                return this.testString(string, type) as boolean;
+            if (test) {
+                return this.testString(subject, test) as boolean;
             }
 
             // Default return
@@ -337,20 +335,20 @@ class Validator {
             // Default results values in rich mode
             let results = {} as strVal.StrValRichResults;
 
-            results.string = string;
-            results.length = string.length;
-            if (lengthOpts) results.testLength = lengthOpts;
-            if (type) results.test = type;
+            results.subject = subject;
+            results.length = subject.length;
+            if (limits) results.limits = limits;
+            if (test) results.test = test;
 
             // Check length of the string
-            if (lengthOpts) {
-                results = {...results, ...this.testLength(string.length, lengthOpts) as strVal.ValRichResults};
+            if (limits) {
+                results = {...results, ...this.testLength(subject.length, limits) as strVal.ValRichResults};
                 if (!results.result) return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
             // Test string
-            if (type) {
-                results = {...results, ...this.testString(string, type) as strVal.ValRichResults};
+            if (test) {
+                results = {...results, ...this.testString(subject, test) as strVal.ValRichResults};
                 return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
@@ -373,9 +371,9 @@ class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    public num(number:number, rangeOpts?:strVal.RangeOptions|null, type?:strVal.NumValTypes):boolean|strVal.NumValRichResults|void {
+    public num(subject:number, limits?:strVal.LimitsOptions|null, test?:strVal.NumValTypes):boolean|strVal.NumValRichResults|void {
 
-        if (typeof number !== "number") this.throwError("001", typeof number);
+        if (typeof subject !== "number") this.throwError("001", typeof subject);
         
         /**
          * --------------
@@ -385,13 +383,13 @@ class Validator {
         if (this.mode === "easy") {
 
             // Check if number is inside specified range
-            if (rangeOpts) {
-                if (!this.testRange(number, rangeOpts) as boolean) return false;
+            if (limits) {
+                if (!this.testRange(subject, limits) as boolean) return false;
             }
 
             // Test number type
-            if (type) {
-                return this.testNumber(number, type) as boolean;
+            if (test) {
+                return this.testNumber(subject, test) as boolean;
             }
 
             // Default return
@@ -407,19 +405,19 @@ class Validator {
             // Default results values in rich mode
             let results = {} as strVal.NumValRichResults;
 
-            results.number = number;
-            if (rangeOpts) results.testRange = rangeOpts;
-            if (type) results.test = type;
+            results.subject = subject;
+            if (limits) results.limits = limits;
+            if (test) results.test = test;
 
             // Check if number is inside specified range
-            if (rangeOpts) {
-                results = {...results, ...this.testRange(number, rangeOpts) as strVal.ValRichResults};
+            if (limits) {
+                results = {...results, ...this.testRange(subject, limits) as strVal.ValRichResults};
                 if (!results.result) return this.removeUnwantedResults(results) as strVal.NumValRichResults;
             }
 
             // Test number type
-            if (type) {
-                results = {...results, ...this.testNumber(number, type) as strVal.ValRichResults};
+            if (test) {
+                results = {...results, ...this.testNumber(subject, test) as strVal.ValRichResults};
                 return this.removeUnwantedResults(results) as strVal.NumValRichResults;
             }
 

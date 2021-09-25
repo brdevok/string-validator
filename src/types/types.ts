@@ -29,12 +29,10 @@ export declare namespace strVal {
         [key: string]: any
         failure?: boolean
         description?: boolean
-        string?: boolean
+        subject?: boolean
         test?: boolean
         length?: boolean
-        testLength?: boolean
-        number?: boolean
-        testRange?: boolean
+        limits?: boolean
     }
 
     /** String regexp tests property of Validator class. */
@@ -63,7 +61,7 @@ export declare namespace strVal {
      */
 
     /** Settings object for instance a new Validator class. */
-    interface ConfigOptions {
+    interface ConfigSettings {
         mode?: Mode
         lang?: Lang
         results?: RichResults
@@ -74,7 +72,7 @@ export declare namespace strVal {
      */
 
     /** Range options. */
-    interface RangeOptions {
+    interface LimitsOptions {
         min?: number
         max?: number
     }
@@ -99,18 +97,18 @@ export declare namespace strVal {
     /** Results for str() method */
     interface StrValRichResults extends ValRichResults {
         [key: string]: any
-        string: string
+        subject: string
         test?: string
         length: number
-        testLength?: RangeOptions
+        limits?: LimitsOptions
     }
 
     /** Results for num() method */
     interface NumValRichResults extends ValRichResults {
         [key: string]: any
-        number: number
+        subject: number
         test?: string
-        testRange?: RangeOptions
+        limits?: LimitsOptions
     }
 
 }

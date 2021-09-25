@@ -9,7 +9,7 @@ describe("Test the removeUnwantedResults()", () => {
         const test1 = new Validator({
             mode: "rich",
             results: {
-                string: false
+                subject: false
             }
         });
         const removeUnwantedResultsSpy1 = jest.spyOn(test1 as any, "removeUnwantedResults");
@@ -18,7 +18,7 @@ describe("Test the removeUnwantedResults()", () => {
         const test2 = new Validator({
             mode: "rich",
             results: {
-                number: false
+                subject: false
             }
         });
         const removeUnwantedResultsSpy2 = jest.spyOn(test1 as any, "removeUnwantedResults");
@@ -39,12 +39,10 @@ describe("Test the removeUnwantedResults()", () => {
             results: {
                 failure: false,
                 description: false,
-                string: false,
+                subject: false,
                 test: false,
                 length: false,
-                testLength: false,
-                number: false,
-                testRange: false,
+                limits: false,
             }
         });
         const removeUnwantedResultsSpy4 = jest.spyOn(test1 as any, "removeUnwantedResults");
@@ -68,7 +66,7 @@ describe("Test the removeUnwantedResults()", () => {
         expect(test3.str(string, null, "num")).toStrictEqual({
             result: false,
             test: "num",
-            string: string,
+            subject: string,
             length: string.length
         } as strVal.StrValRichResults);
         expect(removeUnwantedResultsSpy3).toHaveBeenCalled();

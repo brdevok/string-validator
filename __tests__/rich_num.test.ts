@@ -23,49 +23,49 @@ describe("Validator.num() tests in rich mode", () => {
         expect(okResult1).toStrictEqual({
             result: true,
             test: "int",
-            number: number1,
-            testRange: { min: 0, max: 1000 }
+            subject: number1,
+            limits: { min: 0, max: 1000 }
         } as strVal.NumValRichResults);
         expect(okResult2).toStrictEqual({
             result: true,
-            number: number2,
+            subject: number2,
             test: "float"
         } as strVal.NumValRichResults);
         expect(okResult3).toStrictEqual({
             result: true,
-            number: number1,
+            subject: number1,
         } as strVal.NumValRichResults);
         expect(okResult4).toStrictEqual({
             result: true,
-            number: number2,
+            subject: number2,
         } as strVal.NumValRichResults);
         expect(wrongResult1).toStrictEqual({
             result: false,
             failure: "NONUMMATCH",
             description: failures["NONUMMATCH"],
-            number: number1,
+            subject: number1,
             test: "float"
         } as strVal.NumValRichResults);
         expect(wrongResult2).toStrictEqual({
             result: false,
             failure: "NONUMMATCH",
             description: failures["NONUMMATCH"],
-            number: number2,
+            subject: number2,
             test: "int"
         } as strVal.NumValRichResults);
         expect(wrongResult3).toStrictEqual({
             result: false,
             failure: "MAXRANGE",
             description: failures["MAXRANGE"],
-            number: number1,
-            testRange: { min: -10, max: 0}
+            subject: number1,
+            limits: { min: -10, max: 0}
         } as strVal.NumValRichResults);
         expect(wrongResult4).toStrictEqual({
             result: false,
             failure: "MINRANGE",
             description: failures["MINRANGE"],
-            number: number2,
-            testRange: { min: 1}
+            subject: number2,
+            limits: { min: 1}
         } as strVal.NumValRichResults);
 
 
