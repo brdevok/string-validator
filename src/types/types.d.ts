@@ -15,9 +15,11 @@ export namespace strVal {
 
     interface ConfigOptions {
         mode?: Mode
+        lang?: Lang
         results?: RichResults
     }
 
+    type Lang = "en"|"es"|"br"|"fr"|"de"
     type Mode = "easy"|"rich"
     interface StrTestTypes {
         [key: string]: RegExp

@@ -7,21 +7,13 @@ import failures from "./failures";
  */
 class Validator {
 
+    private lang:strVal.Lang = "en";
+
     /** Current mode of the validator instance. */
     private mode:strVal.Mode = "easy";
 
     /** RegExp collection to test strings. */
-    private testRegExp:strVal.StrTestTypes = {
-        any: /^[\w\W]{0,}$/m,
-        abc: /^[a-zA-Z]{0,}$/m,
-        text: /^[a-zA-Z.,\-"':;¡!¿? ]{0,}$/m,
-        num: /^[0-9]{0,}$/m,
-        field: /^[a-zA-Z ]{0,}$/m,
-        email: /^[^@]+@[a-zA-Z0-9\-]+(\.[a-zA-Z]+){1,3}$/m,
-        mix: /^[a-zA-Z0-9 ,.\-()+]{0,}$/m,
-        float: /^[0-9]+\.[0-9]+$/m,
-        password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m
-    };
+    private testRegExp:strVal.StrTestTypes;
 
     /** Collection of methods to validate different number types */
     private numberTests:strVal.NumTestTypes = {
@@ -54,6 +46,10 @@ class Validator {
         // Set props
         if (options && options.mode) this.mode = options.mode;
         if (options && options.results) this.richResults = {...this.richResults, ...options.results};
+        if (options && options.lang) this.lang = options.lang;
+
+        // Set string regex tests values
+        this.testRegExp = require("./testRegExp")[this.lang]
 
     }
 
