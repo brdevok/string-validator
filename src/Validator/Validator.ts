@@ -8,7 +8,7 @@ import failures from "./failures";
 class Validator {
 
     /** Current mode of the validator instance. */
-    private mode:strVal.Mode;
+    private mode:strVal.Mode = "easy";
 
     /** RegExp collection to test strings. */
     private testRegExp:strVal.StrTestTypes = {
@@ -29,6 +29,18 @@ class Validator {
         float: (n:number) => n % 1 !== 0
     };
 
+    /** Manage the "rich" mode results data to display on each validation */
+    private richResults:strVal.RichResults = {
+        failure: true,
+        description: true,
+        string: true,
+        test: true,
+        length: true,
+        testLength: true,
+        number: true,
+        testRange: true,
+    }
+
     /**
      * Create a new instance of the validator class, a set of settings can be passed as an object
      * argument to define the mode and other general options.
@@ -39,7 +51,9 @@ class Validator {
         
         if (options && options.mode && (options.mode !== "easy" && options.mode !== "rich")) this.throwError("300", options.mode);
 
-        this.mode = (options && options.mode) ? options.mode : "easy";
+        // Set props
+        if (options && options.mode) this.mode = options.mode;
+        if (options && options.results) this.richResults = {...this.richResults, ...options.results};
 
     }
 
@@ -67,6 +81,18 @@ class Validator {
         }
 
         this.testRegExp = {...this.testRegExp, [key]: newRegExp};
+
+    }
+
+    private removeUnwantedResults = (results:strVal.StrValRichResults|strVal.NumValRichResults):strVal.StrValRichResults|strVal.NumValRichResults => {
+        
+        for (let data in results) {
+            
+            if (data in this.richResults && !this.richResults[data]) delete results[data];
+
+        }
+
+        return results;
 
     }
 
@@ -225,9 +251,7 @@ class Validator {
 
             return { result: true } as strVal.ValRichResults;
 
-        }
-
-        
+        }    
 
     }
 
@@ -283,7 +307,7 @@ class Validator {
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
     public str(string:string, lengthOpts?:strVal.RangeOptions|null, type?:strVal.StrValTypes):boolean|strVal.StrValRichResults|void {
-        
+
         if (typeof string !== "string") this.throwError("000", typeof string);
 
         /**
@@ -314,29 +338,28 @@ class Validator {
         } else {
 
             // Default results values in rich mode
-            let results = {
-                string: string,
-                length: string.length
-            } as strVal.StrValRichResults;
+            let results = {} as strVal.StrValRichResults;
 
-            if (lengthOpts) results = {...results, testLength: lengthOpts};
-            if (type) results = {...results, test: type};
+            results.string = string;
+            results.length = string.length;
+            if (lengthOpts) results.testLength = lengthOpts;
+            if (type) results.test = type;
 
             // Check length of the string
             if (lengthOpts) {
                 results = {...results, ...this.testLength(string.length, lengthOpts) as strVal.ValRichResults};
-                if (!results.result) return results;
+                if (!results.result) return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
             // Test string
             if (type) {
                 results = {...results, ...this.testString(string, type) as strVal.ValRichResults};
-                return results;
+                return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
             // Default return
-            results = {...results, result: true};
-            return results;
+            results.result = true;
+            return this.removeUnwantedResults(results) as strVal.StrValRichResults;
 
         }
 
@@ -385,28 +408,27 @@ class Validator {
         } else {
 
             // Default results values in rich mode
-            let results = {
-                number: number
-            } as strVal.NumValRichResults;
+            let results = {} as strVal.NumValRichResults;
 
-            if (rangeOpts) results = {...results, testRange: rangeOpts};
-            if (type) results = {...results, test: type};
+            results.number = number;
+            if (rangeOpts) results.testRange = rangeOpts;
+            if (type) results.test = type;
 
             // Check if number is inside specified range
             if (rangeOpts) {
                 results = {...results, ...this.testRange(number, rangeOpts) as strVal.ValRichResults};
-                if (!results.result) return results;
+                if (!results.result) return this.removeUnwantedResults(results) as strVal.NumValRichResults;
             }
 
             // Test number type
             if (type) {
                 results = {...results, ...this.testNumber(number, type) as strVal.ValRichResults};
-                return results;
+                return this.removeUnwantedResults(results) as strVal.NumValRichResults;
             }
 
             // Default return
-            results = {...results, result: true};
-            return results;
+            results.result = true;
+            return this.removeUnwantedResults(results) as strVal.NumValRichResults;
 
         }
 

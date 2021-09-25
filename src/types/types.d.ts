@@ -1,8 +1,21 @@
 
 export namespace strVal {
 
+    interface RichResults {
+        [key: string]: any
+        failure?: boolean
+        description?: boolean
+        string?: boolean
+        test?: boolean
+        length?: boolean
+        testLength?: boolean
+        number?: boolean
+        testRange?: boolean
+    }
+
     interface ConfigOptions {
-        mode: Mode
+        mode?: Mode
+        results?: RichResults
     }
 
     type Mode = "easy"|"rich"
@@ -45,6 +58,7 @@ export namespace strVal {
     }
     
     interface StrValRichResults extends ValRichResults {
+        [key: string]: any
         string: string
         test?: string
         length: number
@@ -52,6 +66,7 @@ export namespace strVal {
     }
 
     interface NumValRichResults extends ValRichResults {
+        [key: string]: any
         number: number
         test?: string
         testRange?: RangeOptions
