@@ -14,8 +14,8 @@
     "build": "npm run build:esm && npm run build:cjs"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Braian Rosas",
+  "license": "MIT",
   "files": [
     "/dist"
   ],
