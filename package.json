@@ -9,7 +9,7 @@
   ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/esm/types/types.d.ts",
+  "types": "dist/esm/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/braiandev/string-validator.git"
