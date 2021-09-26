@@ -20,7 +20,7 @@ This little library written in Typescript was made to serve as a faster and reli
 
 ## Installation
 
-Run the command `npm i --save-dev @brdev/string-validator` to include the library directly into your proyect.
+Run the command `npm i --save-dev @braiandev/string-validator` to include the library directly into your proyect.
 
 ## Quick usage
 
@@ -28,7 +28,7 @@ You can start using this library really quick in a few steps with minimal config
 
 1. First import it.
 ```javascript
-import Validator from "@brdev/string-validator";
+import Validator from "@braiandev/string-validator";
 ```
 
 2. Then create a new instance of the Validator class with some settings.
