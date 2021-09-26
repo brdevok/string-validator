@@ -1,6 +1,6 @@
 {
   "name": "@braiandev/string-validator",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "This little library written in Typescript was made to serve as a faster and reliable easy-to-use tool for strings validations that come *specially* from UI forms, but can be used to test any string type no matter the source.",
   "author": "Braian Rosas",
   "license": "MIT",
@@ -11,10 +11,8 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "repository": {
+    "type": "git",
     "url": "git://github.com/braiandev/string-validator.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "test": "jest",
@@ -25,9 +23,23 @@
     "build": "npm run build:esm && npm run build:cjs"
   },
   "keywords": [
-    "string", "numbers", "validation", "form", "field", "password", "email", 
-    "name", "regular expression", "regexp", "alphabet", "string-validator", 
-    "number-validator", "validator", "test", "match", "text" 
+    "string",
+    "numbers",
+    "validation",
+    "form",
+    "field",
+    "password",
+    "email",
+    "name",
+    "regular expression",
+    "regexp",
+    "alphabet",
+    "string-validator",
+    "number-validator",
+    "validator",
+    "test",
+    "match",
+    "text"
   ],
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -42,5 +54,9 @@
     "ts-loader": "^9.2.6",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/braiandev/string-validator/issues"
+  },
+  "homepage": "https://github.com/braiandev/string-validator#readme"
 }
