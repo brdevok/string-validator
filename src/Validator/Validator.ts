@@ -301,7 +301,7 @@ class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    public str(subject:string, limits?:strVal.LimitsOptions|null, test?:strVal.StrValTypes):boolean|strVal.StrValRichResults|void {
+    public str(subject:string, limits?:strVal.LimitsOptions|null, test?:strVal.StrValTypes):boolean|strVal.StrValRichResults {
 
         if (typeof subject !== "string") this.throwError("000", typeof subject);
 
@@ -371,7 +371,7 @@ class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    public num(subject:number, limits?:strVal.LimitsOptions|null, test?:strVal.NumValTypes):boolean|strVal.NumValRichResults|void {
+    public num(subject:number, limits?:strVal.LimitsOptions|null, test?:strVal.NumValTypes):boolean|strVal.NumValRichResults {
 
         if (typeof subject !== "number") this.throwError("001", typeof subject);
         

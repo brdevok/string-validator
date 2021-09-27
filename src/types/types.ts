@@ -84,7 +84,7 @@ export declare namespace strVal {
     }
 
     /** String test types. */
-    type StrValTypes = "any"|"abc"|"text"|"num"|"field"|"email"|"mix"|"float"|"password"
+    type StrValTypes = "any"|"abc"|"text"|"num"|"field"|"email"|"mix"|"float"|"password"|"lowpassword"|"url"|"http"|"https"|"base64"|"binary"
 
     /** Number test types. */
     type NumValTypes = "int"|"float"

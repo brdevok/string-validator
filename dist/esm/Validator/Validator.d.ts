@@ -70,7 +70,7 @@ declare class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    str(subject: string, limits?: strVal.LimitsOptions | null, test?: strVal.StrValTypes): boolean | strVal.StrValRichResults | void;
+    str(subject: string, limits?: strVal.LimitsOptions | null, test?: strVal.StrValTypes): boolean | strVal.StrValRichResults;
     /**
      * Run a number test to define if the passed number match the specified requeriments
      * of range and validation type.
@@ -82,6 +82,6 @@ declare class Validator {
      * If no requeriments are passed, then this function will always return *true* on
      * "easy" mode or *{ result: true }* on "rich" mode.
      */
-    num(subject: number, limits?: strVal.LimitsOptions | null, test?: strVal.NumValTypes): boolean | strVal.NumValRichResults | void;
+    num(subject: number, limits?: strVal.LimitsOptions | null, test?: strVal.NumValTypes): boolean | strVal.NumValRichResults;
 }
 export default Validator;
