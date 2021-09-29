@@ -111,7 +111,6 @@ class Validator {
             // Range errors
             case "100": throw new Error("Wrong length options configuration, 'min' value must be minor than or equal to 'max' value.");
             case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
-            case "102": throw new Error("Wrong length options configuration, 'min' and 'max' must be positive integers.");
             // Test types errors
             case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
             case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
@@ -134,21 +133,17 @@ class Validator {
     private testLength(length:number, limits:strVal.LimitsOptions):boolean|strVal.ValRichResults {
 
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("002");
-        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("100");
-        
-        /** Prevent throw error, instead return failure - @since 1.0.1 */
-        if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
-            return {
-                result: false,
-                failure: "WRONGSTRLIMITS",
-                description: failures["WRONGSTRLIMITS"]
-            }
-        }
+        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("100");    
 
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
+
+            /** Prevent throw error if limits are negative, instead return failure */
+            if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
+                return false;
+            }
 
             if ("min" in limits && length < (limits.min as number)) return false;
             if ("max" in limits && length > (limits.max as number)) return false;
@@ -159,6 +154,15 @@ class Validator {
          * CHECK LENGTH IN RICH MODE
          */
         } else {
+
+            /** Prevent throw error if limits are negative, instead return failure */
+            if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
+                return {
+                    result: false,
+                    failure: "WRONGSTRLIMITS",
+                    description: failures["WRONGSTRLIMITS"]
+                };
+            }
 
             if ("min" in limits && length < (limits.min as number)) return {
                 result: false,
@@ -345,6 +349,7 @@ class Validator {
 
             results.subject = subject;
             results.length = subject.length;
+            results.lang = this.lang;
             if (limits) results.limits = limits;
             if (test) results.test = test;
 

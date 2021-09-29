@@ -19,6 +19,7 @@ describe("Validator.str() tests in rich mode", () => {
 
         expect(okResult1).toStrictEqual({
             result: true,
+            lang: "en",
             test: "any",
             subject: string,
             length: string.length,
@@ -26,17 +27,20 @@ describe("Validator.str() tests in rich mode", () => {
         } as strVal.StrValRichResults);
         expect(okResult2).toStrictEqual({
             result: true,
+            lang: "en",
             subject: string,
             length: string.length
         } as strVal.StrValRichResults);
         expect(okResult3).toStrictEqual({
             result: true,
+            lang: "en",
             subject: string,
             length: string.length,
             limits: { min: 20 }
         } as strVal.StrValRichResults);
         expect(wrongResult1).toStrictEqual({
             result: false,
+            lang: "en",
             failure: "MAXLENGTH",
             description: failures["MAXLENGTH"],
             subject: string,
@@ -45,6 +49,7 @@ describe("Validator.str() tests in rich mode", () => {
         } as strVal.StrValRichResults);
         expect(wrongResult2).toStrictEqual({
             result: false,
+            lang: "en",
             failure: "NOSTRMATCH",
             description: failures["NOSTRMATCH"],
             subject: string,
@@ -54,6 +59,7 @@ describe("Validator.str() tests in rich mode", () => {
         } as strVal.StrValRichResults);
         expect(wrongResult3).toStrictEqual({
             result: false,
+            lang: "en",
             failure: "MINLENGTH",
             description: failures["MINLENGTH"],
             subject: string,
