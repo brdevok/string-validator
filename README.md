@@ -2,7 +2,7 @@
 
 This little library written in Typescript was made to serve as a faster and reliable easy-to-use tool for strings validations that come **specially** from UI forms, but can be used to test any string type no matter the source.
 
-## [Click me to check the demo!](https://braiandev.github.io/string-validator-demo/)
+### [Click me to check the demo!](https://braiandev.github.io/string-validator-demo/)
 
 ## Index
 
