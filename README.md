@@ -126,12 +126,14 @@ const bad = validate.str("pass123", null, "password");
 console.log(good) /* {
     result: true,
     subject: "#Str0nGP@55worD!",
+    lang: "en",
     length: 16,
     test: "password"
 } */
 console.log(bad) /* {
     result: false,
     subject: "#Str0nGP@55worD!",
+    lang: "en",
     length: 16,
     test: "password",
     failure: "NOSTRMATCH",
@@ -201,6 +203,7 @@ Key | Value | Success | Failure | Description
 `failure`| `string` | :x: | :heavy_check_mark: | Failure code
 `description` | `string` | :x: | :heavy_check_mark: | Failure description
 `subject` | `string\|number` | :heavy_check_mark: | :heavy_check_mark: | Tested subject
+`lang`| `string` | :heavy_check_mark: | :heavy_check_mark: | Tested language (only when testing strings)
 `test` | `string` | :heavy_check_mark: | :heavy_check_mark: | Test type used (only if defined)
 `length` | `number` | :heavy_check_mark: | :heavy_check_mark: | Length of the subject (if defined and if it's a string)
 `limits` | `object` | :heavy_check_mark: | :heavy_check_mark: | Limits tested (if defined)
@@ -215,6 +218,7 @@ Failure | Description
 `"MINRANGE"` | `"Number value is less than the minumum required value."`
 `"MAXRANGE"` | `"Number value is greater than the maximum specified value."`
 `"NONUMMATCH"` | `"Number type doesn't match with the specified test type."`
+`"WRONGSTRLIMITS"` | `"Limits can't be negative values while testing strings."`
 
 
 
@@ -240,6 +244,7 @@ const validate = Validator({
         test: true,
         length: true,
         limits: true,
+        lang: true
     }
 });
 ```
@@ -275,6 +280,7 @@ Return: {
     failure: "NOSTRMATCH",
     description: "String doesn't match with the specified test type.",
     subject: "string",
+    lang: "en",
     length: 6,
     test: "num"
 }; 
@@ -319,6 +325,7 @@ Key | Value | Default | Description
 `description` | `boolean` | `true` | Return the description of the failure, i.e: `"Number value is less than the minumum required value."`
 `subject` | `boolean` | `true` | Return the test subject, i.e: `"Lorem ipsum"`
 `test` | `boolean` | `true` | Return the test type, i.e: `"email"`
+`lang` | `boolean` | `true` | Return the test language, i.e: `"en"`
 `length` | `boolean` | `true` | Return the length of a string subject, i.e: `20`
 `limits` | `boolean` | `true` | Return the limits if setted, i.e: `{min: 0, max: 100}`
 
