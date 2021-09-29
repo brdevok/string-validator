@@ -4,5 +4,6 @@ export default {
     "NOSTRMATCH": "String doesn't match with the specified test type.",
     "MINRANGE": "Number value is less than the minumum required value.",
     "MAXRANGE": "Number value is greater than the maximum specified value.",
-    "NONUMMATCH": "Number type doesn't match with the specified test type."
+    "NONUMMATCH": "Number type doesn't match with the specified test type.",
+    "WRONGSTRLIMITS": "Limits can't be negative values while testing strings."
 };

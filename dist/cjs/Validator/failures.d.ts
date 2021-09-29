@@ -5,5 +5,6 @@ declare const _default: {
     MINRANGE: string;
     MAXRANGE: string;
     NONUMMATCH: string;
+    WRONGSTRLIMITS: string;
 };
 export default _default;

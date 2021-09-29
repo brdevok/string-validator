@@ -100,7 +100,6 @@ var Validator = /** @class */ (function () {
             // Range errors
             case "100": throw new Error("Wrong length options configuration, 'min' value must be minor than or equal to 'max' value.");
             case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
-            case "102": throw new Error("Wrong length options configuration, 'min' and 'max' must be positive integers.");
             // Test types errors
             case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
             case "201": throw new Error("Test type '" + arg + "' is not a valid string test key.");
@@ -121,12 +120,14 @@ var Validator = /** @class */ (function () {
             this.throwError("002");
         if (("min" in limits && "max" in limits) && limits.min > limits.max)
             this.throwError("100");
-        if (("min" in limits && limits.min < 0) || ("max" in limits && limits.max < 0))
-            this.throwError("102");
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
+            /** Prevent throw error if limits are negative, instead return failure */
+            if (("min" in limits && limits.min < 0) || ("max" in limits && limits.max < 0)) {
+                return false;
+            }
             if ("min" in limits && length < limits.min)
                 return false;
             if ("max" in limits && length > limits.max)
@@ -137,6 +138,14 @@ var Validator = /** @class */ (function () {
              */
         }
         else {
+            /** Prevent throw error if limits are negative, instead return failure */
+            if (("min" in limits && limits.min < 0) || ("max" in limits && limits.max < 0)) {
+                return {
+                    result: false,
+                    failure: "WRONGSTRLIMITS",
+                    description: failures["WRONGSTRLIMITS"]
+                };
+            }
             if ("min" in limits && length < limits.min)
                 return {
                     result: false,
@@ -298,6 +307,7 @@ var Validator = /** @class */ (function () {
             var results = {};
             results.subject = subject;
             results.length = subject.length;
+            results.lang = this.lang;
             if (limits)
                 results.limits = limits;
             if (test)

@@ -28,6 +28,7 @@ export declare namespace strVal {
         test?: boolean;
         length?: boolean;
         limits?: boolean;
+        lang?: boolean;
     }
     /** String regexp tests property of Validator class. */
     interface StrTestTypes {
@@ -72,7 +73,7 @@ export declare namespace strVal {
         max?: number;
     }
     /** String test types. */
-    type StrValTypes = "any" | "abc" | "text" | "num" | "field" | "email" | "mix" | "float" | "password";
+    type StrValTypes = "any" | "abc" | "text" | "num" | "field" | "email" | "mix" | "float" | "password" | "lowpassword" | "url" | "http" | "https" | "base64" | "binary";
     /** Number test types. */
     type NumValTypes = "int" | "float";
     /**
@@ -87,6 +88,7 @@ export declare namespace strVal {
     /** Results for str() method */
     interface StrValRichResults extends ValRichResults {
         [key: string]: any;
+        lang: Lang;
         subject: string;
         test?: string;
         length: number;
