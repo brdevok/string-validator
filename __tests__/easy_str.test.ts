@@ -54,7 +54,7 @@ describe("Validator.str() tests in easy mode", () => {
         expect(easyVal.str(string, lenOpts6)).toBe(false);
         expect(easyVal.str(string, lenOpts7)).toBe(false);
         expect(easyVal.str(string, lenOpts12)).toBe(false);
-        expect(() => easyVal.str(string, lenOpts8)).toThrow();
+        expect(easyVal.str(string, lenOpts8)).toBe(false);
         expect(() => easyVal.str(string, lenOpts9 as never)).toThrow();
         expect(() => easyVal.str(string, lenOpts10 as never)).toThrow();
         expect(() => easyVal.str(string, lenOpts11 as never)).toThrow();

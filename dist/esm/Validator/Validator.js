@@ -118,12 +118,15 @@ var Validator = /** @class */ (function () {
     Validator.prototype.testLength = function (length, limits) {
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number"))
             this.throwError("002");
-        if (("min" in limits && "max" in limits) && limits.min > limits.max)
-            this.throwError("100");
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && limits.min > limits.max) {
+                return false;
+            }
+            ;
             /** Prevent throw error if limits are negative, instead return failure */
             if (("min" in limits && limits.min < 0) || ("max" in limits && limits.max < 0)) {
                 return false;
@@ -138,6 +141,15 @@ var Validator = /** @class */ (function () {
              */
         }
         else {
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && limits.min > limits.max) {
+                return {
+                    result: false,
+                    failure: "WRONGLIMITS",
+                    description: failures["WRONGLIMITS"]
+                };
+            }
+            ;
             /** Prevent throw error if limits are negative, instead return failure */
             if (("min" in limits && limits.min < 0) || ("max" in limits && limits.max < 0)) {
                 return {
@@ -169,12 +181,15 @@ var Validator = /** @class */ (function () {
     Validator.prototype.testRange = function (number, limits) {
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number"))
             this.throwError("003");
-        if (("min" in limits && "max" in limits) && limits.min > limits.max)
-            this.throwError("101");
         /**
          * CHECK RANGE IN EASY MODE
          */
         if (this.mode === "easy") {
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && limits.min > limits.max) {
+                return false;
+            }
+            ;
             if ("min" in limits && number < limits.min)
                 return false;
             if ("max" in limits && number > limits.max)
@@ -185,6 +200,15 @@ var Validator = /** @class */ (function () {
              */
         }
         else {
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && limits.min > limits.max) {
+                return {
+                    result: false,
+                    failure: "WRONGLIMITS",
+                    description: failures["WRONGLIMITS"]
+                };
+            }
+            ;
             if ("min" in limits && number < limits.min)
                 return {
                     result: false,

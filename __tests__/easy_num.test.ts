@@ -55,7 +55,7 @@ describe("Validator.num() tests in easy mode", () => {
         expect(easyVal.num(number1, rangeOpts6)).toBe(false);
         expect(easyVal.num(number1, rangeOpts7)).toBe(false);
         expect(easyVal.num(number1, rangeOpts8)).toBe(false);
-        expect(() => easyVal.num(number1, rangeOpts9)).toThrow();
+        expect(easyVal.num(number1, rangeOpts9)).toBe(false);
         expect(() => easyVal.num(number1, rangeOpts10 as never)).toThrow();
         expect(() => easyVal.num(number1, rangeOpts11 as never)).toThrow();
         expect(() => easyVal.num(number1, rangeOpts12 as never)).toThrow();

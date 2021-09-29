@@ -133,12 +133,16 @@ class Validator {
     private testLength(length:number, limits:strVal.LimitsOptions):boolean|strVal.ValRichResults {
 
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("002");
-        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("100");    
 
         /**
          * CHECK LENGTH IN EASY MODE
          */
         if (this.mode === "easy") {
+
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) {
+                return false;
+            };    
 
             /** Prevent throw error if limits are negative, instead return failure */
             if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
@@ -154,6 +158,15 @@ class Validator {
          * CHECK LENGTH IN RICH MODE
          */
         } else {
+
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) {
+                return {
+                    result: false,
+                    failure: "WRONGLIMITS",
+                    description: failures["WRONGLIMITS"]
+                };
+            };
 
             /** Prevent throw error if limits are negative, instead return failure */
             if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
@@ -189,12 +202,16 @@ class Validator {
     private testRange(number:number, limits:strVal.LimitsOptions):boolean|strVal.ValRichResults {
 
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("003");
-        if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("101");
     
         /**
          * CHECK RANGE IN EASY MODE
          */
         if (this.mode === "easy") {
+
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) {
+                return false;
+            };  
 
             if ("min" in limits && number < (limits.min as number)) return false;
             if ("max" in limits && number > (limits.max as number)) return false;
@@ -205,6 +222,15 @@ class Validator {
          * CHECK RANGE IN RICH MODE
          */
         } else {
+
+            /** Prevent throw error max is minor than min, instead return failure */
+            if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) {
+                return {
+                    result: false,
+                    failure: "WRONGLIMITS",
+                    description: failures["WRONGLIMITS"]
+                };
+            };
 
             if ("min" in limits && number < (limits.min as number)) return {
                 result: false,
