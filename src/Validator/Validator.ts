@@ -135,7 +135,15 @@ class Validator {
 
         if (("min" in limits && typeof limits.min !== "number") || ("max" in limits && typeof limits.max !== "number")) this.throwError("002");
         if (("min" in limits && "max" in limits) && (limits.min as number) > (limits.max as number)) this.throwError("100");
-        if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) this.throwError("102");
+        
+        /** Prevent throw error, instead return failure - @since 1.0.1 */
+        if (("min" in limits && limits.min as number < 0) || ("max" in limits && limits.max as number < 0)) {
+            return {
+                result: false,
+                failure: "WRONGSTRLIMITS",
+                description: failures["WRONGSTRLIMITS"]
+            }
+        }
 
         /**
          * CHECK LENGTH IN EASY MODE
