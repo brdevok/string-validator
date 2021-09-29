@@ -357,7 +357,7 @@ class Validator {
 
             // Test string
             if (test) {
-                return this.testString(subject, test) as boolean;
+                return this.testString(subject, test.toLowerCase()) as boolean;
             }
 
             // Default return
@@ -387,7 +387,7 @@ class Validator {
 
             // Test string
             if (test) {
-                results = {...results, ...this.testString(subject, test) as strVal.ValRichResults};
+                results = {...results, ...this.testString(subject, test.toLowerCase()) as strVal.ValRichResults};
                 return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
@@ -428,7 +428,7 @@ class Validator {
 
             // Test number type
             if (test) {
-                return this.testNumber(subject, test) as boolean;
+                return this.testNumber(subject, test.toLowerCase()) as boolean;
             }
 
             // Default return
@@ -456,7 +456,7 @@ class Validator {
 
             // Test number type
             if (test) {
-                results = {...results, ...this.testNumber(subject, test) as strVal.ValRichResults};
+                results = {...results, ...this.testNumber(subject, test.toLowerCase()) as strVal.ValRichResults};
                 return this.removeUnwantedResults(results) as strVal.NumValRichResults;
             }
 

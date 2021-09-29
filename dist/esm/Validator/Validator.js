@@ -316,7 +316,7 @@ var Validator = /** @class */ (function () {
             }
             // Test string
             if (test) {
-                return this.testString(subject, test);
+                return this.testString(subject, test.toLowerCase());
             }
             // Default return
             return true;
@@ -344,7 +344,7 @@ var Validator = /** @class */ (function () {
             }
             // Test string
             if (test) {
-                results = __assign(__assign({}, results), this.testString(subject, test));
+                results = __assign(__assign({}, results), this.testString(subject, test.toLowerCase()));
                 return this.removeUnwantedResults(results);
             }
             // Default return
@@ -379,7 +379,7 @@ var Validator = /** @class */ (function () {
             }
             // Test number type
             if (test) {
-                return this.testNumber(subject, test);
+                return this.testNumber(subject, test.toLowerCase());
             }
             // Default return
             return true;
@@ -405,7 +405,7 @@ var Validator = /** @class */ (function () {
             }
             // Test number type
             if (test) {
-                results = __assign(__assign({}, results), this.testNumber(subject, test));
+                results = __assign(__assign({}, results), this.testNumber(subject, test.toLowerCase()));
                 return this.removeUnwantedResults(results);
             }
             // Default return
