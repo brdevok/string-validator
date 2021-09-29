@@ -48,7 +48,7 @@ class Validator {
         if (settings && settings.lang) this.lang = settings.lang;
 
         // Set string regex tests values
-        this.testRegExp = require("./testRegExp")[this.lang]
+        this.testRegExp = require("./testRegExp")[this.lang];
 
     }
 
@@ -115,11 +115,11 @@ class Validator {
             case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
             case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
             case "202": throw new Error(`Test type '${arg}' is not a valid number test key.`);
-            case "203": throw new Error(`Test type key argument is not a valid object-key string.`);
+            case "203": throw new Error("Test type key argument is not a valid object-key string.");
             // Settings errors
             case "300": throw new Error(`Wrong instance, '${arg}' is not a valid mode.`);
 
-            default: throw new Error(`Error code '${code}' doesn't exist.`) // Debug purposes only
+            default: throw new Error(`Error code '${code}' doesn't exist.`); // Debug purposes only
 
         }
 
@@ -181,12 +181,12 @@ class Validator {
                 result: false,
                 failure: "MINLENGTH",
                 description: failures["MINLENGTH"]
-            }
+            };
             if ("max" in limits && length > (limits.max as number)) return {
                 result: false,
                 failure: "MAXLENGTH",
                 description: failures["MAXLENGTH"]
-            }
+            };
 
             return { result: true };
 
@@ -236,12 +236,12 @@ class Validator {
                 result: false,
                 failure: "MINRANGE",
                 description: failures["MINRANGE"]
-            }
+            };
             if ("max" in limits && number > (limits.max as number)) return {
                 result: false,
                 failure: "MAXRANGE",
                 description: failures["MAXRANGE"]
-            }
+            };
 
             return { result: true };
 

@@ -16,6 +16,7 @@
   },
   "scripts": {
     "test": "jest",
+    "lint": "eslint",
     "watch:build:esm": "tsc --watch",
     "watch:build:cjs": "tsc --watch --module commonjs --outDir dist/cjs",
     "build:esm": "tsc",

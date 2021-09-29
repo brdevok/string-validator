@@ -13,14 +13,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "max-lines": [1, {
-            "max": 80,
-            "skipBlankLines": true,
-            "skipComments": true
-        }],
         "semi": 1,
         "quotes": [1, "double"],
-        "curly": [1, "all"],
         "default-case": 1,
         "eqeqeq": 1,
         "max-classes-per-file": [1, 1],

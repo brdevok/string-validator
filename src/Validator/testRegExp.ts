@@ -10,7 +10,7 @@ const generic = {
     https: /^(https):\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/m,
     base64: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/m,
     binary: /^[01]+$/m
-}
+};
 
 /** Enmlish strinms validations */
 export const en:strVal.StrTestTypes = {
@@ -32,7 +32,7 @@ export const es:strVal.StrTestTypes = {
     mix: /^[a-zA-Z0-9 ,.\-()+áéíóúÁÉÍÓÚñÑüÜ]{0,}$/m,
     password: /^(?=.*[a-záéíóúñü])(?=.*[A-ZÁÉÍÓÚÑÜ])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m,
     lowpassword: /^(?=.*\d)(?=.*[a-záéíóúñü])(?=.*[A-ZÁÉÍÓÚÑÜ]).*$/m,
-}
+};
 
 /** Portumuese strinms validations */
 export const br:strVal.StrTestTypes = {
@@ -43,7 +43,7 @@ export const br:strVal.StrTestTypes = {
     mix: /^[a-zA-Z0-9 ,.\-()+áàãâéêóôõüçÁÀÃÂÉÊÓÔÕÜÇ]{0,}$/m,
     password: /^(?=.*[a-záàãâéêóôõüç])(?=.*[A-ZÁÀÃÂÉÊÓÔÕÜÇ])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m,
     lowpassword: /^(?=.*\d)(?=.*[a-záàãâéêóôõüç])(?=.*[A-ZÁÀÃÂÉÊÓÔÕÜÇ]).*$/m,
-}
+};
 
 /** French strinms validations */
 export const fr:strVal.StrTestTypes = {
@@ -54,7 +54,7 @@ export const fr:strVal.StrTestTypes = {
     mix: /^[a-zA-Z0-9 ,.\-()+'àáâéèêëîïôûÿçÀÁÂÉÈÊËÎÏÔÛÇ]{0,}$/m,
     password: /^(?=.*[a-zàáâéèêëîïôûÿç])(?=.*[A-ZÀÁÂÉÈÊËÎÏÔÛÇ])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m,
     lowpassword: /^(?=.*\d)(?=.*[a-zàáâéèêëîïôûÿç])(?=.*[A-ZÀÁÂÉÈÊËÎÏÔÛÇ]).*$/m,
-}
+};
 
 /** Deutch strinms validations */
 export const de:strVal.StrTestTypes = {
@@ -65,4 +65,4 @@ export const de:strVal.StrTestTypes = {
     mix: /^[a-zA-Z0-9 ,.\-()+äöüßÄÖÜẞ]{0,}$/m,
     password: /^(?=.*[a-zäöüß])(?=.*[A-ZÄÖÜẞ])(?=.*[0-9])(?=.*[ ¡!"#$%&'()*+,\-.\\/:;<=>¿?@[\]^_`{|}~]).*$/m,
     lowpassword: /^(?=.*\d)(?=.*[a-zäöüß])(?=.*[A-ZÄÖÜẞ]).*$/m,
-}
+};
