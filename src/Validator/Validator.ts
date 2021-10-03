@@ -109,9 +109,6 @@ class Validator {
             case "003": throw new Error("Unexpected datatype on range options, expected all values to be a number.");
             case "004": throw new Error("Wrong regular expression value on argument, expected a valid string/RegExp pattern.");
             case "005": throw new Error("Wrong key value on argument, expected a valid object-key string.");
-            // Range errors
-            case "100": throw new Error("Wrong length options configuration, 'min' value must be minor than or equal to 'max' value.");
-            case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
             // Test types errors
             case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
             case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
