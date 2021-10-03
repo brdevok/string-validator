@@ -14,6 +14,9 @@ class Validator {
     /** Current mode of the validator instance. */
     private mode:strVal.Mode = "easy";
 
+    /** Remove white spaces at the beginning and the end of the string */
+    private trim:boolean = false;
+
     /** RegExp collection to test strings. */
     private testRegExp:strVal.StrTestTypes;
 
@@ -31,7 +34,8 @@ class Validator {
         test: true,
         length: true,
         limits: true,
-        lang: true
+        lang: true,
+        trim: true
     }
 
     /**
@@ -48,6 +52,7 @@ class Validator {
         if (settings && settings.mode) this.mode = settings.mode;
         if (settings && settings.results) this.richResults = {...this.richResults, ...settings.results};
         if (settings && settings.lang) this.lang = settings.lang;
+        if (settings && settings.trim) this.trim = settings.trim;
 
         // Set string regex tests values
         this.testRegExp = require("./testRegExp")[this.lang];
@@ -322,6 +327,10 @@ class Validator {
 
         if (typeof subject !== "string") this.throwError("000");
 
+        let testSubject = subject;
+
+        if (this.trim) testSubject = subject.trim();
+
         /**
          * --------------
          * EASY MODE TEST
@@ -331,12 +340,12 @@ class Validator {
 
             // Check length of the string
             if (limits) {
-                if (!this.testLength(subject.length, limits) as boolean) return false;
+                if (!this.testLength(testSubject.length, limits) as boolean) return false;
             }
 
             // Test string
             if (test) {
-                return this.testString(subject, test.toLowerCase()) as boolean;
+                return this.testString(testSubject, test.toLowerCase()) as boolean;
             }
 
             // Default return
@@ -352,21 +361,22 @@ class Validator {
             // Default results values in rich mode
             let results = {} as strVal.StrValRichResults;
 
-            results.subject = subject;
-            results.length = subject.length;
+            results.subject = testSubject;
+            results.length = testSubject.length;
             results.lang = this.lang;
+            results.trim = this.trim;
             if (limits) results.limits = limits;
             if (test) results.test = test;
 
             // Check length of the string
             if (limits) {
-                results = {...results, ...this.testLength(subject.length, limits) as strVal.ValRichResults};
+                results = {...results, ...this.testLength(testSubject.length, limits) as strVal.ValRichResults};
                 if (!results.result) return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 
             // Test string
             if (test) {
-                results = {...results, ...this.testString(subject, test.toLowerCase()) as strVal.ValRichResults};
+                results = {...results, ...this.testString(testSubject, test.toLowerCase()) as strVal.ValRichResults};
                 return this.removeUnwantedResults(results) as strVal.StrValRichResults;
             }
 

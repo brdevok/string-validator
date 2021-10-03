@@ -130,7 +130,8 @@ console.log(good) /* {
     subject: "#Str0nGP@55worD!",
     lang: "en",
     length: 16,
-    test: "password"
+    test: "password",
+    trim: false
 } */
 console.log(bad) /* {
     result: false,
@@ -139,7 +140,8 @@ console.log(bad) /* {
     length: 16,
     test: "password",
     failure: "NOSTRMATCH",
-    description: "String doesn't match with the specified test type."
+    description: "String doesn't match with the specified test type.",
+    trim: false
 } */
 ```
 
@@ -209,6 +211,7 @@ Key | Value | Success | Failure | Description
 `test` | `string` | :heavy_check_mark: | :heavy_check_mark: | Test type used (only if defined)
 `length` | `number` | :heavy_check_mark: | :heavy_check_mark: | Length of the subject (if defined and if it's a string)
 `limits` | `object` | :heavy_check_mark: | :heavy_check_mark: | Limits tested (if defined)
+`trim` | `boolean` | :heavy_check_mark: | :heavy_check_mark: | If string was trimmed or not (only when testing strings)
 
 When a test returns failure, the `failure` and `description` can help you to understand where was the problem with the subject, the possible failure codes and descriptions are below:
 
@@ -221,6 +224,7 @@ Failure | Description
 `"MAXRANGE"` | `"Number value is greater than the maximum specified value."`
 `"NONUMMATCH"` | `"Number type doesn't match with the specified test type."`
 `"WRONGSTRLIMITS"` | `"Limits can't be negative values while testing strings."`
+`"WRONGLIMITS"` | `"Max. limit value can't be less than min. limit value."`
 
 
 
@@ -228,17 +232,19 @@ Failure | Description
 
 To start using the validator you must create a new instance of the `Validator` class, the constructor accepts one argument called `settings` where you can define the behavior of the validator.
 
-By default the validator has three properties that can be managed in `settings` with an object with the following keys: `mode`, `lang`, `results`.
+By default the validator has three properties that can be managed in `settings` with an object with the following keys: `mode`, `lang`, `results` and `trim`.
 
  * `mode` is how the results of the validations should return.
  * `lang` adds support for different languages when testing strings.
  * `results`, when `mode` is set to `"rich"` you can choose wich data won't be returned from the validations.
+ * `trim` defines if a tested string must be trimmed, if true, string will be trimmed before any limit or type test.
 
 Example:
 ```javascript
 const validate = Validator({
     mode: "rich",
     lang: "es",
+    trim: false,
     results: {
         failure: true,
         description: true,
@@ -247,6 +253,7 @@ const validate = Validator({
         length: true,
         limits: true,
         lang: true
+        trim: true,
     }
 });
 ```
@@ -255,6 +262,7 @@ Argument | Data-type | Value
 -------- | --------- | -----
 `mode` | `string` | `"easy"\|"rich"`
 `lang` | `string` | `"en"\|"es"\|"br"\|"fr"\|"de"`
+`trim` | `boolean` | `true\|false`
 `results` | `object` | Example: `{string: false, length: false}`
 
 ### Modes
@@ -330,6 +338,7 @@ Key | Value | Default | Description
 `lang` | `boolean` | `true` | Return the test language, i.e: `"en"`
 `length` | `boolean` | `true` | Return the length of a string subject, i.e: `20`
 `limits` | `boolean` | `true` | Return the limits if setted, i.e: `{min: 0, max: 100}`
+`trim` | `boolean` | `true` | Return if string was trimmed or not
 
 ## Add custom tests
 

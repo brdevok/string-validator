@@ -44,7 +44,8 @@ describe("Test the removeUnwantedResults()", () => {
                 test: false,
                 length: false,
                 limits: false,
-                lang: false
+                lang: false,
+                trim: false
             }
         });
         const removeUnwantedResultsSpy4 = jest.spyOn(test1 as any, "removeUnwantedResults");
@@ -55,7 +56,8 @@ describe("Test the removeUnwantedResults()", () => {
         expect(test1.str(string, null, "any")).toStrictEqual({
             result: true,
             test: "any",
-            length: string.length
+            length: string.length,
+            trim: false
         } as strVal.StrValRichResults);
         expect(removeUnwantedResultsSpy1).toHaveBeenCalled();
 
@@ -70,12 +72,13 @@ describe("Test the removeUnwantedResults()", () => {
             lang: "en",
             test: "num",
             subject: string,
-            length: string.length
+            length: string.length,
+            trim: false
         } as strVal.StrValRichResults);
         expect(removeUnwantedResultsSpy3).toHaveBeenCalled();
 
         expect(test4.str(string, { min: 0, max: 1000 }, "email")).toStrictEqual({
-            result: false,
+            result: false
         } as strVal.StrValRichResults);
         expect(removeUnwantedResultsSpy4).toHaveBeenCalled();
 

@@ -71,6 +71,7 @@ export declare namespace strVal {
     interface ConfigSettings {
         mode?: Mode
         lang?: Lang
+        trim?: boolean
         results?: RichResults
     }
 
@@ -109,6 +110,7 @@ export declare namespace strVal {
         test?: string
         length: number
         limits?: LimitsOptions
+        trim: boolean
     }
 
     /** Results for num() method */

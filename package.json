@@ -15,7 +15,7 @@
     "url": "git://github.com/braiandev/string-validator.git"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --watchAll",
     "lint": "eslint",
     "watch:build:esm": "tsc --watch",
     "watch:build:cjs": "tsc --watch --module commonjs --outDir dist/cjs",
