@@ -30,6 +30,7 @@ class Validator {
         test: true,
         length: true,
         limits: true,
+        lang: true
     }
 
     /**
