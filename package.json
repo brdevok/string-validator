@@ -1,6 +1,6 @@
 {
   "name": "@braiandev/string-validator",
-  "version": "1.0.1-beta",
+  "version": "1.0.2-beta",
   "description": "This little library written in Typescript was made to serve as a faster and reliable easy-to-use tool for strings validations that come *specially* from UI forms, but can be used to test any string type no matter the source.",
   "author": "Braian Rosas",
   "license": "MIT",
