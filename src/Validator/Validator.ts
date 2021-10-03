@@ -1,5 +1,6 @@
 import { strVal } from "../types/types";
 import failures from "./failures";
+import errors from "./errors";
 
 /**
  * Core validator class, contains all the testing methods for strings and numbers
@@ -41,7 +42,7 @@ class Validator {
      */
     constructor(settings?:strVal.ConfigSettings) {
         
-        if (settings && settings.mode && (settings.mode !== "easy" && settings.mode !== "rich")) this.throwError("300", settings.mode);
+        if (settings && settings.mode && (settings.mode !== "easy" && settings.mode !== "rich")) this.throwError("300");
 
         // Set props
         if (settings && settings.mode) this.mode = settings.mode;
@@ -95,31 +96,11 @@ class Validator {
     /**
      * Throw an error if something in the validation process does not meet the requirements to work
      * properly.
-     * The error displayed depends on the error code passed ass an argument, in addition, some extra
-     * argument can be passed to display dynamic error messages.
+     * The error displayed depends on the error code passed ass an argument.
      */
-    private throwError(code:string, arg?:string):void {
+    private throwError(code:string):void {
 
-        switch (code) {
-
-            // Datatypes errors
-            case "000": throw new Error(`Expected a string datatype to validate, instead received: '${arg}'`);
-            case "001": throw new Error(`Expected a number datatype to validate, instead received: '${arg}'`);
-            case "002": throw new Error("Unexpected datatype on length options, expected all values to be a number.");
-            case "003": throw new Error("Unexpected datatype on range options, expected all values to be a number.");
-            case "004": throw new Error("Wrong regular expression value on argument, expected a valid string/RegExp pattern.");
-            case "005": throw new Error("Wrong key value on argument, expected a valid object-key string.");
-            // Test types errors
-            case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
-            case "201": throw new Error(`Test type '${arg}' is not a valid string test key.`);
-            case "202": throw new Error(`Test type '${arg}' is not a valid number test key.`);
-            case "203": throw new Error("Test type key argument is not a valid object-key string.");
-            // Settings errors
-            case "300": throw new Error(`Wrong instance, '${arg}' is not a valid mode.`);
-
-            default: throw new Error(`Error code '${code}' doesn't exist.`); // Debug purposes only
-
-        }
+        throw new Error(errors[code]);
 
     }
 
@@ -259,7 +240,7 @@ class Validator {
         if (type in this.testRegExp) test = this.testRegExp[type].test(string);
         else {
             test = false;
-            this.throwError("201", type);
+            this.throwError("201");
         }
 
         /**
@@ -299,7 +280,7 @@ class Validator {
         if (type in this.numberTests) test = this.numberTests[type](number);
         else {
             test = false;
-            this.throwError("202", type);
+            this.throwError("202");
         }
 
         /**
@@ -339,7 +320,7 @@ class Validator {
      */
     public str(subject:string, limits?:strVal.LimitsOptions|null, test?:strVal.StrValTypes):boolean|strVal.StrValRichResults {
 
-        if (typeof subject !== "string") this.throwError("000", typeof subject);
+        if (typeof subject !== "string") this.throwError("000");
 
         /**
          * --------------
@@ -410,7 +391,7 @@ class Validator {
      */
     public num(subject:number, limits?:strVal.LimitsOptions|null, test?:strVal.NumValTypes):boolean|strVal.NumValRichResults {
 
-        if (typeof subject !== "number") this.throwError("001", typeof subject);
+        if (typeof subject !== "number") this.throwError("001");
         
         /**
          * --------------
