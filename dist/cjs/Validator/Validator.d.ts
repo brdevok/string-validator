@@ -8,6 +8,8 @@ declare class Validator {
     private lang;
     /** Current mode of the validator instance. */
     private mode;
+    /** Remove white spaces at the beginning and the end of the string */
+    private trim;
     /** RegExp collection to test strings. */
     private testRegExp;
     /** Collection of methods to validate different number types */
@@ -30,8 +32,7 @@ declare class Validator {
     /**
      * Throw an error if something in the validation process does not meet the requirements to work
      * properly.
-     * The error displayed depends on the error code passed ass an argument, in addition, some extra
-     * argument can be passed to display dynamic error messages.
+     * The error displayed depends on the error code passed ass an argument.
      */
     private throwError;
     /**

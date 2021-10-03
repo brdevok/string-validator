@@ -15,6 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var failures_1 = __importDefault(require("./failures"));
+var errors_1 = __importDefault(require("./errors"));
 /**
  * Core validator class, contains all the testing methods for strings and numbers
  * and must be initialized as an new instance.
@@ -32,6 +33,8 @@ var Validator = /** @class */ (function () {
         this.lang = "en";
         /** Current mode of the validator instance. */
         this.mode = "easy";
+        /** Remove white spaces at the beginning and the end of the string */
+        this.trim = false;
         /** Collection of methods to validate different number types */
         this.numberTests = {
             int: function (n) { return n % 1 === 0; },
@@ -45,6 +48,8 @@ var Validator = /** @class */ (function () {
             test: true,
             length: true,
             limits: true,
+            lang: true,
+            trim: true
         };
         this.removeUnwantedResults = function (results) {
             for (var data in results) {
@@ -54,7 +59,7 @@ var Validator = /** @class */ (function () {
             return results;
         };
         if (settings && settings.mode && (settings.mode !== "easy" && settings.mode !== "rich"))
-            this.throwError("300", settings.mode);
+            this.throwError("300");
         // Set props
         if (settings && settings.mode)
             this.mode = settings.mode;
@@ -62,6 +67,8 @@ var Validator = /** @class */ (function () {
             this.richResults = __assign(__assign({}, this.richResults), settings.results);
         if (settings && settings.lang)
             this.lang = settings.lang;
+        if (settings && settings.trim)
+            this.trim = settings.trim;
         // Set string regex tests values
         this.testRegExp = require("./testRegExp")[this.lang];
     }
@@ -90,30 +97,10 @@ var Validator = /** @class */ (function () {
     /**
      * Throw an error if something in the validation process does not meet the requirements to work
      * properly.
-     * The error displayed depends on the error code passed ass an argument, in addition, some extra
-     * argument can be passed to display dynamic error messages.
+     * The error displayed depends on the error code passed ass an argument.
      */
-    Validator.prototype.throwError = function (code, arg) {
-        switch (code) {
-            // Datatypes errors
-            case "000": throw new Error("Expected a string datatype to validate, instead received: '" + arg + "'");
-            case "001": throw new Error("Expected a number datatype to validate, instead received: '" + arg + "'");
-            case "002": throw new Error("Unexpected datatype on length options, expected all values to be a number.");
-            case "003": throw new Error("Unexpected datatype on range options, expected all values to be a number.");
-            case "004": throw new Error("Wrong regular expression value on argument, expected a valid string/RegExp pattern.");
-            case "005": throw new Error("Wrong key value on argument, expected a valid object-key string.");
-            // Range errors
-            case "100": throw new Error("Wrong length options configuration, 'min' value must be minor than or equal to 'max' value.");
-            case "101": throw new Error("Wrong range options configuration, 'min' value must be minor than or equal to 'max' value.");
-            // Test types errors
-            case "200": throw new Error("The test value you are trying to create has an invalid string/RegExp format.");
-            case "201": throw new Error("Test type '" + arg + "' is not a valid string test key.");
-            case "202": throw new Error("Test type '" + arg + "' is not a valid number test key.");
-            case "203": throw new Error("Test type key argument is not a valid object-key string.");
-            // Settings errors
-            case "300": throw new Error("Wrong instance, '" + arg + "' is not a valid mode.");
-            default: throw new Error("Error code '" + code + "' doesn't exist."); // Debug purposes only
-        }
+    Validator.prototype.throwError = function (code) {
+        throw new Error(errors_1.default[code]);
     };
     /**
      * Run a string length test, this function is called when the length range options are passed to the
@@ -240,7 +227,7 @@ var Validator = /** @class */ (function () {
             test = this.testRegExp[type].test(string);
         else {
             test = false;
-            this.throwError("201", type);
+            this.throwError("201");
         }
         /**
          * TEST STRING IN EASY MODE
@@ -273,7 +260,7 @@ var Validator = /** @class */ (function () {
             test = this.numberTests[type](number);
         else {
             test = false;
-            this.throwError("202", type);
+            this.throwError("202");
         }
         /**
          * TEST NUMBER IN EASY MODE
@@ -307,7 +294,10 @@ var Validator = /** @class */ (function () {
      */
     Validator.prototype.str = function (subject, limits, test) {
         if (typeof subject !== "string")
-            this.throwError("000", typeof subject);
+            this.throwError("000");
+        var testSubject = subject;
+        if (this.trim)
+            testSubject = subject.trim();
         /**
          * --------------
          * EASY MODE TEST
@@ -316,12 +306,12 @@ var Validator = /** @class */ (function () {
         if (this.mode === "easy") {
             // Check length of the string
             if (limits) {
-                if (!this.testLength(subject.length, limits))
+                if (!this.testLength(testSubject.length, limits))
                     return false;
             }
             // Test string
             if (test) {
-                return this.testString(subject, test.toLowerCase());
+                return this.testString(testSubject, test.toLowerCase());
             }
             // Default return
             return true;
@@ -334,22 +324,23 @@ var Validator = /** @class */ (function () {
         else {
             // Default results values in rich mode
             var results = {};
-            results.subject = subject;
-            results.length = subject.length;
+            results.subject = testSubject;
+            results.length = testSubject.length;
             results.lang = this.lang;
+            results.trim = this.trim;
             if (limits)
                 results.limits = limits;
             if (test)
                 results.test = test;
             // Check length of the string
             if (limits) {
-                results = __assign(__assign({}, results), this.testLength(subject.length, limits));
+                results = __assign(__assign({}, results), this.testLength(testSubject.length, limits));
                 if (!results.result)
                     return this.removeUnwantedResults(results);
             }
             // Test string
             if (test) {
-                results = __assign(__assign({}, results), this.testString(subject, test.toLowerCase()));
+                results = __assign(__assign({}, results), this.testString(testSubject, test.toLowerCase()));
                 return this.removeUnwantedResults(results);
             }
             // Default return
@@ -370,7 +361,7 @@ var Validator = /** @class */ (function () {
      */
     Validator.prototype.num = function (subject, limits, test) {
         if (typeof subject !== "number")
-            this.throwError("001", typeof subject);
+            this.throwError("001");
         /**
          * --------------
          * EASY MODE TEST
